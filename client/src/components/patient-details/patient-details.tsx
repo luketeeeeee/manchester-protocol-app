@@ -15,7 +15,6 @@ export const PatientDetails = () =>
   {
     const { patientId } = useParams();
     const { patient, findPatientById, updatePatient } = usePatientsStore();
-    // const [sum, setSum] = useState<number>(0);
 
     useEffect(() => {
       findPatientById(patientId);
