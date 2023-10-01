@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -21,6 +22,29 @@ const RenderPatientsCards = ({ data }: RenderPatientsCardsProps) => {
 };
 
 export const Home = () => {
+  const { patients, createPatient, findAllPatients, deleteAllPatients } =
+    usePatientsStore();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<CreatePatientSchemaType>({
+    resolver: zodResolver(createPatientSchema),
+  });
+
+  const onSubmit: SubmitHandler<CreatePatientSchemaType> = async (data) => {
+    await createPatient(data);
+    reset();
+    findAllPatients();
+  };
+
+  useEffect(() => {
+    findAllPatients();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="h-full flex flex-col">
       <div className="flex flex-col items-center pt-10">
@@ -75,11 +99,21 @@ export const Home = () => {
             </div>
 
             <div className="w-full flex flex-col gap-2">
-              <button className="bg-[#0545a6] text-white py-3 text-xl rounded-lg">
+              <button
+                type="submit"
+                className="bg-[#0545a6] text-white py-3 text-xl rounded-lg"
+              >
                 Registrar
               </button>
-              <button className="bg-[#68727c] text-white py-1 text-xl rounded-lg">
-                Limpar campos
+              <button
+                type="button"
+                onClick={async () => {
+                  await deleteAllPatients();
+                  findAllPatients();
+                }}
+                className="bg-[#68727c] text-white py-1 text-xl rounded-lg"
+              >
+                Limpar lista
               </button>
             </div>
           </form>

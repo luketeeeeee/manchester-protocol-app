@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 export const PatientCard = ({
   id,
   name,
+  cpf,
   currentResult,
 }: {
-  id: string;
-  name: string;
+  id?: string;
+  name?: string;
   cpf?: string;
   currentResult?: string;
 }) => {
